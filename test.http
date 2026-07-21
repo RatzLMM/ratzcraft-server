@@ -1,0 +1,3 @@
+
+GET http://localhost:3000/auth/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNtcnVuMzczMDAwMDBhNHd3NjYwZXRqODIiLCJ1dWlkIjoiYTFhYmJjZjgtZGNlYS00YmE3LTllMjctNmYwNGJiZjk3YTU5IiwidXNlcm5hbWUiOiJpc21hIiwiaWF0IjoxNzg0NjM3ODgwfQ.NC9-FQHz2QXw1OqWcdPzMt9h2UHAo1--5Q4kGUZkSt8
