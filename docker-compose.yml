@@ -7,12 +7,57 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: ratzcraft
-      POSTGRES_PASSWORD: ratzcraft
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-ratzcraft}
       POSTGRES_DB: ratzcraft
-    ports:
-      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ratzcraft"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - ratzcraft
+
+  api:
+    build: .
+    container_name: ratzcraft-api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://ratzcraft:${DB_PASSWORD:-ratzcraft}@postgres:5432/ratzcraft
+      JWT_SECRET: ${JWT_SECRET}
+    ports:
+      - "3000:3000"
+    networks:
+      - ratzcraft
+
+  minecraft:
+    image: itzg/minecraft-server:java17
+    container_name: ratzcraft-mc
+    restart: unless-stopped
+    environment:
+      EULA: "TRUE"
+      TYPE: "PAPER"
+      VERSION: "1.16.5"
+      MEMORY: "4G"
+      ONLINE_MODE: "FALSE"
+      SERVER_NAME: "RatzCraft"
+      MOTD: "RatzCraft Server"
+    ports:
+      - "25565:25565"
+    volumes:
+      - minecraft_data:/data
+    networks:
+      - ratzcraft
+    stdin_open: true
+    tty: true
+
+networks:
+  ratzcraft:
 
 volumes:
   postgres_data:
+  minecraft_data:
