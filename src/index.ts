@@ -40,7 +40,7 @@ async function start() {
     return {
         api: "online",
         database: "online"
-    };
+        };
     });
 }
 
